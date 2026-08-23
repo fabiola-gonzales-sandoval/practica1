@@ -1,25 +1,27 @@
-"use client";
 
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-
-export default function RegisterPage() {
-  const router = useRouter();
-
-  const handleRegister = (e: React.FormEvent) => {
-    e.preventDefault();
-    router.push("/login");
-  };
-
+export default function Register() {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-white p-6">
-      <form onSubmit={handleRegister} className="flex flex-col gap-4 w-full max-w-sm">
-        <h1 className="text-2xl font-bold text-center text-black">REGISTRO</h1>
-        <input type="text" placeholder="USUARIO" className="bg-gray-200 p-3 rounded" required />
-        <input type="password" placeholder="CONTRASEÑA" className="bg-gray-200 p-3 rounded" required />
-        <button type="submit" className="bg-black text-white py-3 rounded font-bold">CREAR CUENTA</button>
-      </form>
-      <Link href="/login" className="mt-4 text-sm font-bold text-black underline">Volver al Login</Link>
-    </main>
+    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
+      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
+        <div>
+          <div>
+            <form action="">
+              {/* entradas del usuario */}
+              <input type="text" placeholder="Nombre" />
+              <input type="text" placeholder="Apellido" />
+              <input type="email" placeholder="Correo" />
+              <input type="text" placeholder="Usuario" />
+              <input type="password" placeholder="Contraseña" />
+              <input type="password" placeholder="Confirma tu contraseña" />
+              {/* boton de registro */}
+              <button>Registrarse</button>
+            </form>
+          </div>
+          <div>
+            <h1>Este es el registrar de la pagina</h1>
+          </div>
+        </div>
+      </main>
+    </div>
   );
 }

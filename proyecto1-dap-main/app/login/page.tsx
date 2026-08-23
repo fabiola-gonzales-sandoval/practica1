@@ -1,27 +1,30 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-
-export default function LoginPage() {
-  const router = useRouter();
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    router.push("/dashboard");
-  };
-
+export default function Login() {
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center bg-white p-6">
-      <form onSubmit={handleLogin} className="flex flex-col gap-4 w-full max-w-sm">
-        <h1 className="text-2xl font-bold text-center text-black">LOGIN</h1>
-        <input type="text" placeholder="USUARIO" className="bg-gray-200 p-3 rounded" required />
-        <input type="password" placeholder="CONTRASEÑA" className="bg-gray-200 p-3 rounded" required />
-        <button type="submit" className="bg-black text-white py-3 rounded font-bold">INGRESAR</button>
-      </form>
-      <p className="mt-4 text-sm text-gray-600">
-        ¿No tienes cuenta? <Link href="/register" className="font-bold underline text-black">Regístrate</Link>
-      </p>
+    <main className="flex flex-1 w-full flex-col items-center justify-center bg-slate-100">
+      <div 
+      className="text-slate-900 flex flex-row w-full items-center 
+      justify-around max-w-2xl bg-white h-96 shadow-lg">
+        <div className="flex flex-col items-start justify-start">
+          <h1 className="mb-15">INICIO DE SESION</h1>
+          <form 
+          action=""
+          className="flex flex-col w-full gap-2.5"
+          >
+            {/* entradas del usuario */}
+            <input type="text" placeholder="Usuario" />
+            <input type="password" placeholder="Contraseña" />
+            {/* boton de inicio de sesion */}
+            <button
+            className="bg-[#313638] text-white">
+              Ingresar</button>
+          </form>
+        </div>
+        <div>
+          <h1>Este es el login de la pagina</h1>
+        </div>
+      </div>
     </main>
   );
 }

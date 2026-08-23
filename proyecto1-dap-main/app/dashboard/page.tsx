@@ -1,14 +1,12 @@
 "use client";
 
-import Header from "../components/Header";
+import Header from '../components/Header';
 
-export default function DashboardPage() {
+export default function Dashboard() {
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Header />
-      <main className="p-8">
-        <h1 className="text-3xl font-bold text-black">PANEL DASHBOARD</h1>
-      </main>
+    <div className="w-full min-h-screen pt-20">
+      <Header></Header>
+      <h1 className="text-black">Este es el Dashboard</h1>
     </div>
   );
 }
