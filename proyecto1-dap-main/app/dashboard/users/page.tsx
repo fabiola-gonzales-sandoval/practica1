@@ -12,10 +12,10 @@ import {
   faTasks,
   faCalendarAlt,
   faUserCircle,
-  faShieldHalved
+  faShieldHalved,
+  faSearch
 } from "@fortawesome/free-solid-svg-icons";
 
-// Tipado del Usuario
 interface User {
   id: string;
   name: string;
@@ -31,7 +31,6 @@ interface Task {
   dueDate: string;
 }
 
-// Datos de prueba para el usuario activo
 const currentUser: User = {
   id: "usr_101",
   name: "Ana Martínez",
@@ -68,6 +67,15 @@ export default function UserTasksPage() {
   const [user] = useState<User>(currentUser);
   const [tasks] = useState<Task[]>(initialTasks);
   const [selectedTask, setSelectedTask] = useState<Task | null>(initialTasks[0]);
+  
+  // Estado para controlar el buscador
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Filtro en tiempo real de tareas
+  const filteredTasks = tasks.filter((task) =>
+    task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    task.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   const getStatusColor = (status: Task["status"]) => {
     switch (status) {
@@ -83,10 +91,9 @@ export default function UserTasksPage() {
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-6 bg-slate-50/50 min-h-screen">
       
-      {/* Banner de Encabezado con Datos del Usuario (User) */}
+      {/* Banner de Encabezado */}
       <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 p-6 text-white shadow-lg">
         <div className="relative z-10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
-          
           <div className="space-y-3">
             <button
               type="button"
@@ -97,7 +104,6 @@ export default function UserTasksPage() {
               <span>Volver</span>
             </button>
 
-            {/* Badge de Info del Usuario */}
             <div className="flex items-center gap-3 pt-1">
               {user.avatarUrl ? (
                 <img
@@ -120,7 +126,6 @@ export default function UserTasksPage() {
             </div>
           </div>
 
-          {/* Botón Añadir Tarea (+) Destacado */}
           <button
             type="button"
             className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-white text-indigo-600 hover:bg-indigo-50 rounded-2xl text-xs font-bold transition-all shadow-md hover:shadow-xl cursor-pointer transform hover:-translate-y-0.5 active:translate-y-0 self-start sm:self-auto"
@@ -131,10 +136,22 @@ export default function UserTasksPage() {
         </div>
       </div>
 
-      {/* Contenedor Principal: Lista/Tabla a la izquierda y Panel a la derecha */}
+      {/* Barra de Búsqueda Integrada */}
+      <div className="relative max-w-md">
+        <FontAwesomeIcon icon={faSearch} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 text-xs" />
+        <input
+          type="text"
+          placeholder="Buscar tareas por título o descripción..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-2xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 shadow-2xs transition-all"
+        />
+      </div>
+
+      {/* Contenedor Principal */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
-        {/* Tabla de Tareas (2/3 de ancho) */}
+        {/* Tabla de Tareas (2/3) */}
         <div className="lg:col-span-2 bg-white border border-slate-200/80 rounded-3xl shadow-sm overflow-hidden">
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
@@ -147,64 +164,71 @@ export default function UserTasksPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 text-xs">
-                {tasks.map((task) => {
-                  const isSelected = selectedTask?.id === task.id;
-                  return (
-                    <tr 
-                      key={task.id} 
-                      className={`transition-colors ${
-                        isSelected ? "bg-indigo-50/60" : "hover:bg-slate-50/80"
-                      }`}
-                    >
-                      <td className="p-4 font-bold text-slate-800">
-                        {task.title}
-                        <p className="text-[11px] text-slate-400 font-normal truncate max-w-xs mt-0.5">
-                          {task.description}
-                        </p>
-                      </td>
-                      <td className="p-4">
-                        <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold border ${getStatusColor(task.status)}`}>
-                          {task.status}
-                        </span>
-                      </td>
-                      <td className="p-4 text-slate-600 font-medium">{task.dueDate}</td>
-                      
-                      {/* Botones de acción coloridos */}
-                      <td className="p-4 text-center">
-                        <div className="inline-flex items-center gap-1.5 bg-slate-100/80 p-1 rounded-xl border border-slate-200/80">
-                          <button
-                            type="button"
-                            title="Editar"
-                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-white text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all shadow-2xs cursor-pointer"
-                          >
-                            <FontAwesomeIcon icon={faEdit} className="text-xs" />
-                          </button>
-                          <button
-                            type="button"
-                            title="Eliminar"
-                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-white text-rose-500 hover:bg-rose-500 hover:text-white transition-all shadow-2xs cursor-pointer"
-                          >
-                            <FontAwesomeIcon icon={faTrashAlt} className="text-xs" />
-                          </button>
-                          <button
-                            type="button"
-                            title="Ver Detalle"
-                            onClick={() => setSelectedTask(task)}
-                            className="w-7 h-7 flex items-center justify-center rounded-lg bg-white text-purple-600 hover:bg-purple-600 hover:text-white transition-all shadow-2xs cursor-pointer"
-                          >
-                            <FontAwesomeIcon icon={faEye} className="text-xs" />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                {filteredTasks.length > 0 ? (
+                  filteredTasks.map((task) => {
+                    const isSelected = selectedTask?.id === task.id;
+                    return (
+                      <tr 
+                        key={task.id} 
+                        className={`transition-colors ${
+                          isSelected ? "bg-indigo-50/60" : "hover:bg-slate-50/80"
+                        }`}
+                      >
+                        <td className="p-4 font-bold text-slate-800">
+                          {task.title}
+                          <p className="text-[11px] text-slate-400 font-normal truncate max-w-xs mt-0.5">
+                            {task.description}
+                          </p>
+                        </td>
+                        <td className="p-4">
+                          <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold border ${getStatusColor(task.status)}`}>
+                            {task.status}
+                          </span>
+                        </td>
+                        <td className="p-4 text-slate-600 font-medium">{task.dueDate}</td>
+                        
+                        <td className="p-4 text-center">
+                          <div className="inline-flex items-center gap-1.5 bg-slate-100/80 p-1 rounded-xl border border-slate-200/80">
+                            <button
+                              type="button"
+                              title="Editar"
+                              className="w-7 h-7 flex items-center justify-center rounded-lg bg-white text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all shadow-2xs cursor-pointer"
+                            >
+                              <FontAwesomeIcon icon={faEdit} className="text-xs" />
+                            </button>
+                            <button
+                              type="button"
+                              title="Eliminar"
+                              className="w-7 h-7 flex items-center justify-center rounded-lg bg-white text-rose-500 hover:bg-rose-500 hover:text-white transition-all shadow-2xs cursor-pointer"
+                            >
+                              <FontAwesomeIcon icon={faTrashAlt} className="text-xs" />
+                            </button>
+                            <button
+                              type="button"
+                              title="Ver Detalle"
+                              onClick={() => setSelectedTask(task)}
+                              className="w-7 h-7 flex items-center justify-center rounded-lg bg-white text-purple-600 hover:bg-purple-600 hover:text-white transition-all shadow-2xs cursor-pointer"
+                            >
+                              <FontAwesomeIcon icon={faEye} className="text-xs" />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })
+                ) : (
+                  <tr>
+                    <td colSpan={4} className="p-8 text-center text-slate-400 text-xs">
+                      No se encontraron tareas con el término "{searchQuery}".
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
         </div>
 
-        {/* Panel Lateral Derecho Con Tarjetas de Color (1/3 de ancho) */}
+        {/* Panel Lateral Derecho */}
         <div className="bg-gradient-to-b from-white to-slate-50 border border-slate-200/80 rounded-3xl p-6 shadow-sm h-fit space-y-4">
           <div className="flex items-center justify-between pb-3 border-b border-slate-200">
             <h2 className="text-sm font-extrabold text-slate-900 flex items-center gap-2">
